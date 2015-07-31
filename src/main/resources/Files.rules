@@ -1,0 +1,71 @@
+MongoURI : "mongodb://user:password@ds053972.mongolab.com:53972/heroku_1pbz17rf" 
+  
+Artifact Picture [    
+	format BINARY  
+	services : delete, download, readAll, search, upload, read
+] { 
+	ref pictureinfo : PersonalData
+	many required peoplepictured : String
+	required place : String  
+	required edited : Boolean  
+}   
+ 
+Artifact Document [     
+	format TEXT  
+	services : all
+] { 
+	ref  docinfo: PersonalData  
+	many coauthors : String   
+	required isfinished : Boolean 
+}  
+       
+Artifact Video [
+	format BINARY 
+	services : delete, download, readAll, search, upload, read
+] {
+	ref videoinfo : PersonalData
+	required length : Double 
+}
+
+Entity PersonalData {
+	required author : String
+	required source : String 
+	many required tags : String 
+	fileextension : String
+} 
+  
+Service DownloadAuthor { 
+	when : Document [download] 
+	when : Picture [download]
+	when : Video [download]
+}
+
+MultiService SimilarPictures {   
+	when : Picture [upload]
+	services : StatisticsPic, ComparePictures
+}
+
+Service StatisticsPic {  
+	input : Picture   
+	output : PersonalData
+} 
+
+Service ComparePictures {  
+	input : PersonalData
+	output : many Picture
+}
+
+MultiService Analyse [parallel] {
+	when : Document [upload]
+	services : StatisticsDoc, DownloadAsTxt 
+}
+
+Service StatisticsDoc { 
+	input : Document
+	output : PersonalData 
+}
+
+Service DownloadAsTxt {
+	input : Document
+	output : Document
+}
