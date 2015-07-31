@@ -28,7 +28,7 @@ public class ServiceDownloadAuthor extends ServiceAbstractJson {
 	public ServiceDownloadAuthor() {
 		// Input classes
 		addInputClass(Response.class);
-		addInputClass(Video.class);
+		addInputClass(Persistent.class);
 		// Output classes
 	}
 
